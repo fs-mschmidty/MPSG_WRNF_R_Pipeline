@@ -1,3 +1,5 @@
+#'
+
 get_natureserve_state_data <- function(state) {
   get_state_rank <- function(x, state_code) {
     regex <- paste0(state_code, " \\(([^)]+)\\)")
@@ -26,7 +28,9 @@ get_natureserve_state_data <- function(state) {
       source = glue("{state} Natureserve Export")
     ) |>
     rowwise() |>
-    mutate("{state}_sRank" := get_state_rank(distribution, state))
+    mutate("{state}_sRank" := get_state_rank(distribution, state)) |>
+    ungroup() |>
+    get_taxonomies()
   l <- list()
   l[[glue("{state}_export_id")]] <- export
   l[[glue("{state}_natureserve_api_response")]] <- res
