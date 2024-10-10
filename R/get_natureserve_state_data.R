@@ -1,4 +1,6 @@
-#'
+#' This function exports all species from a state with NS state rank.
+
+#' @param state a character with state code, exmaple: "CO".
 
 get_natureserve_state_data <- function(state) {
   get_state_rank <- function(x, state_code) {
@@ -11,6 +13,7 @@ get_natureserve_state_data <- function(state) {
       str_extract("\\(([^)]+)\\)") |>
       str_replace_all("\\(|\\)", "")
   }
+
   export <- ns_export(location = list(nation = "US", subnation = state), format = "xlsx")
   res <- ns_export_status(export)
 
@@ -31,6 +34,7 @@ get_natureserve_state_data <- function(state) {
     mutate("{state}_sRank" := get_state_rank(distribution, state)) |>
     ungroup() |>
     get_taxonomies()
+
   l <- list()
   l[[glue("{state}_export_id")]] <- export
   l[[glue("{state}_natureserve_api_response")]] <- res

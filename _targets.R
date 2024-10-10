@@ -37,7 +37,7 @@ lyr_admbdy <- "WRNF_AdminBndry"
 lyr_buffer <- "WRNF_AdminBndry_1kmBuffer"
 
 list(
-  ## Base GIS data
+  # Base GIS data
   tar_target(t_path, file.path("T:/FS/NFS/PSO/MPSG/2024_WhiteRiverNF/1_PreAssessment", "Projects/SpeciesList_WRNF")),
   tar_target(t_path_gdb, file.path(t_path, "SpeciesList_WRNF.gdb")),
   tar_target(unit_fs, sf::read_sf(layer = lyr_planarea, dsn = t_path_gdb) |> dplyr::filter(OWNERCLASSIFICATION == "USDA FOREST SERVICE")),
@@ -48,5 +48,9 @@ list(
   tar_target(co_swap_list, build_co_swap_list("data/co/CO_SWAP_Chapter2.xlsx")),
   tar_target(co_te_list, build_co_te_list("data/co/CNHP_Tracking_List_20240421.xlsx")),
   tar_target(gmug_scc_list, build_gmug_scc_list("data/fs/gmug_scc_list_2024.xlsx")),
-  tar_target(eligible_list_wo_nn, build_eligible_list(natureserve_state_data, r2_ss_list, co_swap_list, co_swap_list, co_te_list))
+  tar_target(co_eligible_list, build_co_eligible_list(natureserve_state_data$CO_natureserve_state_list, r2_ss_list, co_swap_list, co_te_list, gmug_scc_list)),
+
+  ## Clean Occurrence Records
+  tar_target(t_drive_lists, build_t_drive_lists(file.path(t_path, "reproduce"))),
+  tar_target(unit_eligible_list, build_unit_eligible_list(co_eligible_list, t_drive_lists))
 )
