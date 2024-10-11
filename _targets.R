@@ -22,7 +22,8 @@ tar_option_set(
     "rgbif",
     "osmdata",
     "arcgislayers",
-    "scales"
+    "scales",
+    "BIEN"
   ), # Packages that your targets need for their tasks.
   format = "qs" # Optionally set the default storage format. qs is fast.
 )
@@ -35,6 +36,8 @@ tar_source()
 lyr_planarea <- "WRNF_PlanArea"
 lyr_admbdy <- "WRNF_AdminBndry"
 lyr_buffer <- "WRNF_AdminBndry_1kmBuffer"
+
+ext_data_root <- "T:\\FS\\NFS\\PSO\\MPSG\\Data\\ExternalData"
 
 list(
   # Base GIS data
@@ -52,5 +55,9 @@ list(
 
   ## Clean Occurrence Records
   tar_target(t_drive_lists, build_t_drive_lists(file.path(t_path, "reproduce"))),
-  tar_target(unit_eligible_list, build_unit_eligible_list(co_eligible_list, t_drive_lists))
+  tar_target(unit_eligible_list, build_unit_eligible_list(co_eligible_list, t_drive_lists)),
+
+  ## Get Range Maps
+  tar_target(download_ebird_maps, download_ebird_range_maps(unit_eligible_list, output_path = "output/ebirdst")),
+  tar_target(download_bien_range_maps, download_bien_range_maps(unit_eligible_list, output_path = "output/bien_maps"))
 )

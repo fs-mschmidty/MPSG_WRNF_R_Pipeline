@@ -2,3 +2,7 @@
 .Renviron
 **/.conform*
 **/*.docx
+
+output/bien_maps/
+output/ebirdst
+
